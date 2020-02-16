@@ -1,6 +1,6 @@
 clc;clear;
 
-M = dlmread('prom8.txt');
+M = dlmread('3D_01.txt');
 % t, c 	
 % V, м/с 
 % tetta, град

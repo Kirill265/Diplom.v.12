@@ -439,7 +439,7 @@ int main()
 			} while (choise2 != 1 && choise2 != 0);
 
 			//запись параметров в файл
-			ofstream ffout("prom8.txt");
+			ofstream ffout("3D_01.txt");
 			if (choise2 == 1)
 			{
 //				ffout << "t, c \t" << "V, м/с \t" << "tetta, град\t" << "X, м\t" << "Y, м\t" << "Z, м\t" << "omegaZ, рад/c\t"
@@ -698,7 +698,7 @@ void Eyler(double tau, double X[30])
 	double K2_el = T_el / (K_el*pow(TCC_el, 2));
 
 	double K_fi = 50.55;
-	double Kk_v = 1;
+	double Kk_v = 30;
 
 	double K_hi = 0;
 	double Kk_n = 1;
@@ -964,10 +964,10 @@ void Eyler(double tau, double X[30])
 	if (del_v < -pi / 12)
 		del_v = -pi / 12;
 
-	if (del_n > pi / 6)
-		del_n = pi / 6;
-	if (del_n < -pi / 6)
-		del_n = -pi / 6;
+	if (del_n > pi / 12)
+		del_n = pi / 12;
+	if (del_n < -pi / 12)
+		del_n = -pi / 12;
 
 	if (del_el > pi / 6)
 		del_el = pi / 6;
@@ -1059,8 +1059,10 @@ void Eyler(double tau, double X[30])
 		Vx_newTg[0] = Matrix[0][0] * X[21] + Matrix[0][1] * X[22] + Matrix[0][2] * X[23];
 		Vy_newTg[0] = Matrix[1][0] * X[21] + Matrix[1][1] * X[22] + Matrix[1][2] * X[23];
 		Vz_newTg[0] = Matrix[2][0] * X[21] + Matrix[2][1] * X[22] + Matrix[2][2] * X[23];
-		VxTG1 = Vx_newTg[0];
-		VyTG1 = Vy_newTg[0];
+//		VxTG1 = Vx_newTg[0];
+//		VyTG1 = Vy_newTg[0];
+		VxTG1 = X[21];
+		VyTG1 = X[22];
 
 //		alfaTG = 15*(1 - tau / 12);
 
@@ -1093,8 +1095,10 @@ void Eyler(double tau, double X[30])
 		Vx_newTg[1] = Matrix[0][0] * X[27] + Matrix[0][1] * X[28] + Matrix[0][2] * X[29];
 		Vy_newTg[1] = Matrix[1][0] * X[27] + Matrix[1][1] * X[28] + Matrix[1][2] * X[29];
 		Vz_newTg[1] = Matrix[2][0] * X[27] + Matrix[2][1] * X[28] + Matrix[2][2] * X[29];
-		VxTG2 = Vx_newTg[1];
-		VyTG2 = Vy_newTg[1];
+//		VxTG2 = Vx_newTg[1];
+//		VyTG2 = Vy_newTg[1];
+		VxTG2 = X[27];
+		VyTG2 = X[28];
 	}
 
 
