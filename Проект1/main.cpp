@@ -35,7 +35,7 @@ double Nu = cos(ryskanie0 / 2)*sin(tangaj0 / 2)*cos(kren0 / 2) - sin(ryskanie0 /
 // для целей и ракет
 //                  0             1                     2            3    4     5   6    7          8      9      10  11      12  13   14     15		 16			 17       18       19         20         21        22         23        24        25         26         27        28          29
 //               {  ?,           Vxg,                  Vyg,         Vzg,  Xg,  Yg, Zg, Omega x, Omega y, Omega z, Ro, Lambda, Mu, Nu, kren,	 ryskanie,	tangaj,		масса, x цели 1, y цели 1, z цели 1, Vx цели 1, Vy цели 1, Vz цели 1, x цели 2, y цели 2, z цели 2 , Vx цели 2, Vy цели 2, Vz цели 2 }
-double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 0.0,    -200.00,		0.0,    0.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
+double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 150.0,    -200.00,		0.0,    0.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
  
 //для прогноза полета к 1-ой и 2-ой целям:
 double Xf[30] = { 0.0 }, Xs[30] = { 0.0 };	//параметры ракеты и траектории
@@ -439,7 +439,7 @@ int main()
 			} while (choise2 != 1 && choise2 != 0);
 
 			//запись параметров в файл
-			ofstream ffout("3D_01.txt");
+			ofstream ffout("3D_02.txt");
 			if (choise2 == 1)
 			{
 //				ffout << "t, c \t" << "V, м/с \t" << "tetta, град\t" << "X, м\t" << "Y, м\t" << "Z, м\t" << "omegaZ, рад/c\t"
@@ -532,8 +532,8 @@ void Eyler(double tau, double X[30])
 {
 	double d = 0.5;
 	double Ix = 640;
-	double Iy = 2239;//2239; //640
-	double Iz = 2239; //640
+	double Iy = 1500;//2239;//2239; //640
+	double Iz = 1500;//2239; //640
 	double m = X[17];
 	double g = 9.80665;
 	double a = sk_zv(X[5]);
@@ -700,7 +700,7 @@ void Eyler(double tau, double X[30])
 	double K_fi = 50.55;
 	double Kk_v = 30;
 
-	double K_hi = 0;
+	double K_hi = -1.1;
 	double Kk_n = 1;
 
 	double Xc, Yc, Zc;

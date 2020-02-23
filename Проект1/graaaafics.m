@@ -1,6 +1,6 @@
 clc;clear;
 
-M = dlmread('3D_01.txt');
+M = dlmread('3D_02.txt');
 % t, c 	
 % V, м/с 
 % tetta, град
@@ -53,7 +53,9 @@ theta = M(:,31);
 % plot(t,delta_v);
 % plot(t,delta_n);
 % plot(t,dr_dt1-dr_dt2)
-plot(X,Y,Xc_1,Yc_1,Xc_2,Yc_2);
+% plot(X,Y,Xc_1,Yc_1,Xc_2,Yc_2);
+% plot(X,Y,Xc_1,Yc_1);
+plot3(X,Z,Y,Xc_1,Zc_1,Yc_1);
 grid
 % plot(t,r_viz)
 
