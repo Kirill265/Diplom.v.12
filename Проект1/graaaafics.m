@@ -64,6 +64,13 @@ grid
 % subplot(2,1,2);
 % plot(t,n_Ya2); grid;
 
+% subplot(3,1,1);
+% plot(t,betta); grid;
+% subplot(3,1,2);
+% plot(t,delta_n); grid;
+% subplot(3,1,3);
+% plot(t,epsilon); grid;
+
 % leng = 177;
 % subplot(3,1,1);
 % plot(t(1:leng),dr_dt1(1:leng)); grid;

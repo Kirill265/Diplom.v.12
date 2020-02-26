@@ -662,8 +662,10 @@ void Eyler(double tau, double X[30])
 	b[1] = -my_w*l / (Iy*V);
 	b[2] = -my_betta / Iy;
 	b[3] = -Mydel / Iy;
-	b[4] = (-P + Cz_b*q*S) / (m*V);
-	b[5] = -Czdelta*q*S / (m*V);
+//	b[4] = (-P + Cz_b*q*S) / (m*V);
+//	b[5] = -Czdelta*q*S / (m*V);
+	b[4] = (P + Cz_b*q*S) / (m*V);
+	b[5] = Czdelta*q*S / (m*V);
 
 	c[1] = -mx_w*l / (Ix*V);
 	c[3] = -Mxdel / Ix;
@@ -700,7 +702,7 @@ void Eyler(double tau, double X[30])
 	double K_fi = 50.55;
 	double Kk_v = 30;
 
-	double K_hi = -1.1;
+	double K_hi = -0.5;
 	double Kk_n = 1;
 
 	double Xc, Yc, Zc;
@@ -941,7 +943,7 @@ void Eyler(double tau, double X[30])
 
 	//параметры отклонения рулей ракеты расчитанные в данный момент времени
 	double del_v	= K1_v*K_fi*Kk_v*d_fi - K2_v*d_tet;
-	double del_n	= K1_n*K_hi*Kk_n*d_hi - K2_n*d_psi;
+	double del_n	= K1_n*K_hi*Kk_n*d_hi + K2_n*d_psi;
 	double del_el	= - K1_el*d_gamma - K2_el*kren;
 
 	double K3_v = -30;
@@ -1364,7 +1366,7 @@ double cy_d(double M, double alfa_)
 	}
 	while (!(alfa_ >= al[i] && alfa_<al[i + 1]));
 	n = (c[i][j + 1] - c[i][j])*(M - m[j]) / (m[j + 1] - m[j]) + c[i][j];
-	v = (c[i + 1][j + 1] - c[i + 1][j])*(M - m[j]) / (m[j + 1] - m[j]) + c[i + 1][j];
+	v = (c[i + 1][j + 1] - c[ i + 1][j])*(M - m[j]) / (m[j + 1] - m[j]) + c[i + 1][j];
 	koef = (v - n)*(alfa_ - al[i]) / (al[i + 1] - al[i]) + n;
 	return koef*1.1;
 };
