@@ -35,7 +35,7 @@ double Nu = cos(ryskanie0 / 2)*sin(tangaj0 / 2)*cos(kren0 / 2) - sin(ryskanie0 /
 // для целей и ракет
 //                  0             1                     2            3    4     5   6    7          8      9      10  11      12  13   14     15		 16			 17       18       19         20         21        22         23        24        25         26         27        28          29
 //               {  ?,           Vxg,                  Vyg,         Vzg,  Xg,  Yg, Zg, Omega x, Omega y, Omega z, Ro, Lambda, Mu, Nu, kren,	 ryskanie,	tangaj,		масса, x цели 1, y цели 1, z цели 1, Vx цели 1, Vy цели 1, Vz цели 1, x цели 2, y цели 2, z цели 2 , Vx цели 2, Vy цели 2, Vz цели 2 }
-double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 150.0,    -200.00,		0.0,    0.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
+double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 -150.0,    -200.00,		0.0,    +5.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
  
 //для прогноза полета к 1-ой и 2-ой целям:
 double Xf[30] = { 0.0 }, Xs[30] = { 0.0 };	//параметры ракеты и траектории
@@ -71,8 +71,10 @@ void IntRG(const double Ro, const double Lambda, const double Mu, const double N
 //первод из кватернионов в углы Эйлера
 void Ugl(const double Ro, const double Lambda, const double Mu, const double Nu)
 {
-	Ryskanie = atan2(2 * (Ro*Mu - Lambda*Nu), pow(Ro, 2) + pow(Lambda, 2) - pow(Mu, 2) - pow(Nu, 2));
-	Kren = atan2(2 * (Ro*Lambda - Mu*Nu), pow(Ro, 2) - pow(Lambda, 2) + pow(Mu, 2) - pow(Nu, 2));
+	Ryskanie = atan(2 * (Ro*Mu - Lambda*Nu) / (pow(Ro, 2) + pow(Lambda, 2) - pow(Mu, 2) - pow(Nu, 2)));
+	Kren = atan(2 * (Ro*Lambda - Mu*Nu) / (pow(Ro, 2) - pow(Lambda, 2) + pow(Mu, 2) - pow(Nu, 2)));
+//	Ryskanie = atan2(2 * (Ro*Mu - Lambda*Nu), pow(Ro, 2) + pow(Lambda, 2) - pow(Mu, 2) - pow(Nu, 2));
+//	Kren = atan2(2 * (Ro*Lambda - Mu*Nu), pow(Ro, 2) - pow(Lambda, 2) + pow(Mu, 2) - pow(Nu, 2));
 	Tangaj = asin(2 * (Ro*Nu + Mu*Lambda));
 }
 
@@ -531,7 +533,7 @@ int main()
 void Eyler(double tau, double X[30])
 {
 	double d = 0.5;
-	double Ix = 640;
+	double Ix = 240;
 	double Iy = 1500;//2239;//2239; //640
 	double Iz = 1500;//2239; //640
 	double m = X[17];
@@ -635,20 +637,20 @@ void Eyler(double tau, double X[30])
 	//расчет АДХ
 	double Cx = cx(M, alfa1);
 	double Cy_a = cy_a(M, alfa); // * 1.5
-	double Cz_b = cz_b(M, betta);
+	double Cz_b = cz_b(M, betta);// / 5;
 
 	double Cydelta = cy_d(M, alfa) * 1.5;
-	double Czdelta = cz_d(M, betta);
+	double Czdelta = cz_d(M, betta);// / 5;
 
 	double mx_w = mx_wx(M, alfa1)*q*S*l;
-	double my_w = my_wy(M, betta)*q*S*l;
+	double my_w = my_wy(M, betta)*q*S*l; // *5
 	double mz_w = mz_wz(M, alfa)*q*S*l;
 
 	double my_betta = my_b(M, betta)*q*S*l;
 	double mz_alfa = mz_a(M, alfa)*q*S*l;
 
 	double Mxdel = mx_d(M, alfa1)*q*S*l;
-	double Mydel = my_d(M, betta)*q*S*l;
+	double Mydel = my_d(M, betta)*q*S*l * 2;
 	double Mzdel = mz_d(M, alfa)*q*S*l * 0.5;
 
 	//получение динамических парамтеров наведения и стабилизации в момент полета
@@ -662,10 +664,10 @@ void Eyler(double tau, double X[30])
 	b[1] = -my_w*l / (Iy*V);
 	b[2] = -my_betta / Iy;
 	b[3] = -Mydel / Iy;
-//	b[4] = (-P + Cz_b*q*S) / (m*V);
-//	b[5] = -Czdelta*q*S / (m*V);
-	b[4] = (P + Cz_b*q*S) / (m*V);
-	b[5] = Czdelta*q*S / (m*V);
+	b[4] = (-P + Cz_b*q*S) / (m*V);
+	b[5] = -Czdelta*q*S / (m*V);
+//	b[4] = (P + Cz_b*q*S) / (m*V);
+//	b[5] = Czdelta*q*S / (m*V);
 
 	c[1] = -mx_w*l / (Ix*V);
 	c[3] = -Mxdel / Ix;
@@ -702,7 +704,7 @@ void Eyler(double tau, double X[30])
 	double K_fi = 50.55;
 	double Kk_v = 30;
 
-	double K_hi = -0.5;
+	double K_hi = +0.5;
 	double Kk_n = 1;
 
 	double Xc, Yc, Zc;
@@ -713,12 +715,20 @@ void Eyler(double tau, double X[30])
 	{
 		if (tau < t_1st) //на участке выведения
 		{
+			Xc = X[18];
+			Yc = X[19];
+			Zc = X[20];
+			Vxc = X[21];
+			Vyc = X[22];
+			Vzc = X[23];
+			/*
 			Xc = 30000*cos(tangaj_1st)*cos(ryskanie_1st);
 			Yc = 30000*sin(tangaj_1st);
 			Zc = 30000*cos(tangaj_1st)*sin(ryskanie_1st);
 			Vxc = 0;
 			Vyc = 0;
 			Vzc = 0;
+			*/
 		}
 		else if (r_vizir1 >= 6000) //на втором участке траектории
 		{
@@ -925,7 +935,16 @@ void Eyler(double tau, double X[30])
 	double fi_2 = viz_fi(X[5], F[7], Yc);
 	double hi_2 = viz_hi(X[4], Xc, X[6], Zc);
 	//матрица перевода из стартовой СК в сферическую
-	B_sf_st(fi_2, hi_2);
+//	B_sf_st(fi_2, hi_2);
+	B[0][0] = cos(fi_2)*cos(hi_2);
+	B[0][1] = sin(fi_2);
+	B[0][2] = -cos(fi_2)*sin(hi_2);
+	B[1][0] = -sin(fi_2)*cos(hi_2);
+	B[1][1] = cos(fi_2);
+	B[1][2] = sin(fi_2)*sin(hi_2);
+	B[2][0] = sin(hi_2);
+	B[2][1] = 0;
+	B[2][2] = cos(hi_2);
 	//перевод взаимных скоростей цели и ракеты из стартовой СК в сферическую
 	double Vr	= B[0][0] * (Vxc - Vxg) + B[0][1] * (Vyc - Vyg) + B[0][2] * (Vzc - Vzg);
 	double Vfi	= B[1][0] * (Vxc - Vxg) + B[1][1] * (Vyc - Vyg) + B[1][2] * (Vzc - Vzg);
@@ -938,12 +957,13 @@ void Eyler(double tau, double X[30])
 
 	//производные углов наклона траектории ракеты
 	double d_tet	= X[8] * sin(kren) + X[9] * cos(kren);
-	double d_psi	= 1 / cos(tangaj)*(X[8] * cos(kren) - X[9] * sin(kren));
+	double d_psi	= (1 / cos(tangaj))*(X[8] * cos(kren) - X[9] * sin(kren));
 	double d_gamma	= X[8] - tan(tangaj)*(X[8] * cos(kren) - X[9] * sin(kren));
 
 	//параметры отклонения рулей ракеты расчитанные в данный момент времени
 	double del_v	= K1_v*K_fi*Kk_v*d_fi - K2_v*d_tet;
-	double del_n	= K1_n*K_hi*Kk_n*d_hi + K2_n*d_psi;
+	double del_n	= K1_n*K_hi*Kk_n*d_hi - K2_n*d_psi;
+//	double del_n	= +0.3*d_hi - 0.1*d_psi;
 	double del_el	= - K1_el*d_gamma - K2_el*kren;
 
 	double K3_v = -30;
@@ -965,16 +985,21 @@ void Eyler(double tau, double X[30])
 		del_v = pi / 12;
 	if (del_v < -pi / 12)
 		del_v = -pi / 12;
-
+/*
+	if (del_n > pi / 12)
+		del_n = pi / 12;
+	if (del_n < -pi / 12)
+		del_n = -pi / 12;
+*/
 	if (del_n > pi / 12)
 		del_n = pi / 12;
 	if (del_n < -pi / 12)
 		del_n = -pi / 12;
 
-	if (del_el > pi / 6)
-		del_el = pi / 6;
-	if (del_el < -pi / 6)
-		del_el = -pi / 6;
+	if (del_el > pi / 12)
+		del_el = pi / 12;
+	if (del_el < -pi / 12)
+		del_el = -pi / 12;
 
 
 //	if (tau >= t_gambit && (tau < t_gambit + 2) && exper == 0)
@@ -1516,6 +1541,8 @@ double viz_fi(double Y, double r_viz, double Yc)
 double viz_hi(double X, double Xc, double Z, double Zc)
 {
 	return -atan2(Zc - Z, Xc - X);
+//	return -atan((Zc - Z) / (Xc - X));
+
 };
 
 //Функция определния радиуса линии визирования
