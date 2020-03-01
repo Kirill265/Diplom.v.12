@@ -35,7 +35,7 @@ double Nu = cos(ryskanie0 / 2)*sin(tangaj0 / 2)*cos(kren0 / 2) - sin(ryskanie0 /
 // для целей и ракет
 //                  0             1                     2            3    4     5   6    7          8      9      10  11      12  13   14     15		 16			 17       18       19         20         21        22         23        24        25         26         27        28          29
 //               {  ?,           Vxg,                  Vyg,         Vzg,  Xg,  Yg, Zg, Omega x, Omega y, Omega z, Ro, Lambda, Mu, Nu, kren,	 ryskanie,	tangaj,		масса, x цели 1, y цели 1, z цели 1, Vx цели 1, Vy цели 1, Vz цели 1, x цели 2, y цели 2, z цели 2 , Vx цели 2, Vy цели 2, Vz цели 2 }
-double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 -150.0,    -200.00,		0.0,    +5.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
+double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 -500.0,    -200.00,		0.0,    0.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
  
 //для прогноза полета к 1-ой и 2-ой целям:
 double Xf[30] = { 0.0 }, Xs[30] = { 0.0 };	//параметры ракеты и траектории
@@ -453,7 +453,7 @@ int main()
 
 					ffout /*<< fixed << setprecision(2) */ << i*shag << "\t";
 					ffout /*<< fixed << setprecision(4)*/ << sqrt(pow(data2[i][1], 2) + pow(data2[i][2], 2) + pow(data2[i][3], 2)) << "\t";
-					ffout << fixed << setprecision(4) << Tangaj * 180 / 3.141592 << "\t";
+					ffout << fixed << setprecision(4) << Tangaj * 180 / 3.141592 << "\t"; 
 					ffout /*<< fixed << setprecision(4)*/ << data2[i][4] << "\t";
 					ffout /*<< fixed << setprecision(4)*/ << data2[i][5] << "\t";
 					ffout /*<< fixed << setprecision(4)*/ << data2[i][6] << "\t";
@@ -481,7 +481,9 @@ int main()
 					ffout << n_Ya_2[i] << "\t";
 					ffout << Promah[i] << "\t";
 					ffout << Epsilon[i] * 180 / 3.141592 << "\t";
-					ffout << AlphaTG[i] << endl;
+					ffout << AlphaTG[i] << "\t";
+					ffout << fixed << setprecision(4) << Ryskanie * 180 / 3.141592 << endl;
+
 
 				}
 				sh = sh - 1;
@@ -516,7 +518,8 @@ int main()
 				ffout << n_Ya_2[sh] << "\t";
 				ffout << Promah[sh] << "\t";
 				ffout << Epsilon[sh] * 180 / 3.141592 << "\t";
-				ffout << AlphaTG[sh] << endl;
+				ffout << AlphaTG[sh] << "\t";
+				ffout << fixed << setprecision(4) << Ryskanie * 180 / 3.141592 << endl;
 			}
 			do
 			{

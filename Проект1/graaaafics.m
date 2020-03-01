@@ -46,6 +46,8 @@ Vx(:) = V(:).*cosd(tetta(:));
 promah = M(:,29);
 epsilon = M(:,30);
 theta = M(:,31);
+Ryskanie = M(:,32);
+Vz(:) = V(:).*cosd(Ryskanie(:));
 
 % plot(X,Y,Xc_1,Yc_1);
 % grid;
@@ -57,7 +59,15 @@ theta = M(:,31);
 % plot(X,Y,Xc_1,Yc_1);
 % plot3(X,Z,Y,Xc_1,Zc_1,Yc_1);
 plot3(Z,X,Y,Zc_1,Xc_1,Yc_1);
-grid
+grid;
+
+subplot(6,1,1);
+plot(t(2:leng),Zc_1(2:leng)-Z(2:leng)); grid;
+subplot(6,1,2);
+plot(t(2:leng),hi(2:leng)); grid;
+subplot(6,1,3);
+plot(t(2:leng),diff(Zc_1(1:leng))-Vz(2:leng)); grid;
+
 % plot(t,r_viz)
 
 % subplot(2,1,1);
