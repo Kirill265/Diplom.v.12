@@ -42,12 +42,14 @@ r_viz1(:) = M(:,25);
 r_viz2(:) = M(:,26);
 n_Ya1(:) = M(:,27);
 n_Ya2(:) = M(:,28);
-Vx(:) = V(:).*cosd(tetta(:));
 promah = M(:,29);
 epsilon = M(:,30);
 theta = M(:,31);
 Ryskanie = M(:,32);
-Vz(:) = V(:).*cosd(Ryskanie(:));
+Vx(:) = V(:).*cosd(tetta(:)).*cosd(Ryskanie(:));
+Vy(:) = V(:).*sind(tetta(:));
+Vz(:) = V(:).*cosd(tetta(:)).*sind(Ryskanie(:));
+leng=302;
 
 % plot(X,Y,Xc_1,Yc_1);
 % grid;
@@ -61,12 +63,36 @@ Vz(:) = V(:).*cosd(Ryskanie(:));
 plot3(Z,X,Y,Zc_1,Xc_1,Yc_1);
 grid;
 
-subplot(6,1,1);
-plot(t(2:leng),Zc_1(2:leng)-Z(2:leng)); grid;
-subplot(6,1,2);
-plot(t(2:leng),hi(2:leng)); grid;
-subplot(6,1,3);
-plot(t(2:leng),diff(Zc_1(1:leng))-Vz(2:leng)); grid;
+% subplot(2,1,1);
+% plot(t,sqrt(Vx.*Vx + Vy.*Vy + Vz.*Vz)); grid;
+% subplot(2,1,2);
+% plot(t,V); grid;
+
+% subplot(3,1,1);
+% plot(t(2:leng),Zc_1(2:leng)-Z(2:leng)); grid;
+% subplot(3,1,1);
+% plot(t(2:leng),hi(2:leng)); grid;
+% subplot(3,1,2);
+% plot(t(2:leng),diff(Zc_1(1:leng))-Vz(2:leng)); grid;
+% subplot(3,1,3);
+% plot(t(2:leng),(diff(Xc_1(1:leng))-Vx(2:leng)).*sind(hi(2:leng))+(diff(Zc_1(1:leng))-Vz(2:leng)).*cosd(hi(2:leng))); grid;
+
+% subplot(3,1,1);
+% plot(t(2:leng),(diff(Xc_1(1:leng))-Vx(2:leng)).*sind(hi(2:leng))); grid;
+% subplot(3,1,2);
+% plot(t(2:leng),(diff(Zc_1(1:leng))-Vz(2:leng)).*cosd(hi(2:leng))); grid;
+% subplot(3,1,3);
+% plot(t(2:leng),(diff(Xc_1(1:leng))-Vx(2:leng)).*sind(hi(2:leng))+(diff(Zc_1(1:leng))-Vz(2:leng)).*cosd(hi(2:leng))); grid;
+
+% subplot(4,1,1);
+% plot(t(2:leng),(-diff(Xc_1(1:leng))+Vx(2:leng)).*sind(fi(2:leng)).*cosd(hi(2:leng))); grid;
+% subplot(4,1,2);
+% plot(t(2:leng),(diff(Yc_1(1:leng))-Vy(2:leng)).*cosd(fi(2:leng))); grid;
+% subplot(4,1,3);
+% plot(t(2:leng),(diff(Zc_1(1:leng))-Vz(2:leng)).*sind(fi(2:leng)).*sind(hi(2:leng))); grid;
+% subplot(4,1,4);
+% plot(t(2:leng),(-diff(Xc_1(1:leng))+Vx(2:leng)).*sind(fi(2:leng)).*cosd(hi(2:leng))+(diff(Yc_1(1:leng))-Vy(2:leng)).*cosd(fi(2:leng))+(diff(Zc_1(1:leng))-Vz(2:leng)).*sind(fi(2:leng)).*sind(hi(2:leng))); grid;
+
 
 % plot(t,r_viz)
 

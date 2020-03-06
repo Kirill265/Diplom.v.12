@@ -35,7 +35,7 @@ double Nu = cos(ryskanie0 / 2)*sin(tangaj0 / 2)*cos(kren0 / 2) - sin(ryskanie0 /
 // для целей и ракет
 //                  0             1                     2            3    4     5   6    7          8      9      10  11      12  13   14     15		 16			 17       18       19         20         21        22         23        24        25         26         27        28          29
 //               {  ?,           Vxg,                  Vyg,         Vzg,  Xg,  Yg, Zg, Omega x, Omega y, Omega z, Ro, Lambda, Mu, Nu, kren,	 ryskanie,	tangaj,		масса, x цели 1, y цели 1, z цели 1, Vx цели 1, Vy цели 1, Vz цели 1, x цели 2, y цели 2, z цели 2 , Vx цели 2, Vy цели 2, Vz цели 2 }
-double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 -500.0,    -200.00,		0.0,    0.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
+double X00[30] = { 0.0, V0 * cos(tangaj0),	V0 * sin(tangaj0),		0.0, 0.0, 0.0, 0.0, 0.0,      0.0,     0.0,   Ro, Lambda, Mu, Nu, kren0, ryskanie0, tangaj0,	mass0,  23523.0,	5000.0,	 500.0,    -200.00,		0.0,    0.0,     32932.0,	8000.0,    0.0,     -250.0,       0.0,       0.0 };
  
 //для прогноза полета к 1-ой и 2-ой целям:
 double Xf[30] = { 0.0 }, Xs[30] = { 0.0 };	//параметры ракеты и траектории
@@ -718,20 +718,21 @@ void Eyler(double tau, double X[30])
 	{
 		if (tau < t_1st) //на участке выведения
 		{
+			/*
 			Xc = X[18];
 			Yc = X[19];
 			Zc = X[20];
 			Vxc = X[21];
 			Vyc = X[22];
 			Vzc = X[23];
-			/*
+			*/
 			Xc = 30000*cos(tangaj_1st)*cos(ryskanie_1st);
 			Yc = 30000*sin(tangaj_1st);
 			Zc = 30000*cos(tangaj_1st)*sin(ryskanie_1st);
 			Vxc = 0;
 			Vyc = 0;
 			Vzc = 0;
-			*/
+			
 		}
 		else if (r_vizir1 >= 6000) //на втором участке траектории
 		{
@@ -937,6 +938,7 @@ void Eyler(double tau, double X[30])
 	//углы наклона лиии визирования
 	double fi_2 = viz_fi(X[5], F[7], Yc);
 	double hi_2 = viz_hi(X[4], Xc, X[6], Zc);
+//	if (Zc - X[6] > 0) K_hi *= -1;
 	//матрица перевода из стартовой СК в сферическую
 //	B_sf_st(fi_2, hi_2);
 	B[0][0] = cos(fi_2)*cos(hi_2);
@@ -945,16 +947,19 @@ void Eyler(double tau, double X[30])
 	B[1][0] = -sin(fi_2)*cos(hi_2);
 	B[1][1] = cos(fi_2);
 	B[1][2] = sin(fi_2)*sin(hi_2);
-	B[2][0] = sin(hi_2);
+	B[2][0] = -sin(hi_2);
 	B[2][1] = 0;
-	B[2][2] = cos(hi_2);
+	B[2][2] = -cos(hi_2);
+
 	//перевод взаимных скоростей цели и ракеты из стартовой СК в сферическую
 	double Vr	= B[0][0] * (Vxc - Vxg) + B[0][1] * (Vyc - Vyg) + B[0][2] * (Vzc - Vzg);
 	double Vfi	= B[1][0] * (Vxc - Vxg) + B[1][1] * (Vyc - Vyg) + B[1][2] * (Vzc - Vzg);
 	double Vhi	= B[2][0] * (Vxc - Vxg) + B[2][1] * (Vyc - Vyg) + B[2][2] * (Vzc - Vzg);
+//	Vhi = -sin(hi_2)*cos(fi_2) * (Vxc - Vxg) + cos(hi_2) * (Vyc - Vyg) + sin(hi_2)*sin(fi_2) * (Vzc - Vzg);
 	//производные углов наклона линии визирования
 	double d_fi = Vfi / F[7];
-	double d_hi = -Vhi / (F[7] * cos(fi_2));
+	double d_hi = Vhi / (F[7] * cos(fi_2));
+//	d_hi = -Vhi / F[7];
 	F[0] = fi_2;
 	F[1] = hi_2;
 
@@ -988,12 +993,7 @@ void Eyler(double tau, double X[30])
 		del_v = pi / 12;
 	if (del_v < -pi / 12)
 		del_v = -pi / 12;
-/*
-	if (del_n > pi / 12)
-		del_n = pi / 12;
-	if (del_n < -pi / 12)
-		del_n = -pi / 12;
-*/
+
 	if (del_n > pi / 12)
 		del_n = pi / 12;
 	if (del_n < -pi / 12)
