@@ -2,7 +2,7 @@
 #include <string>   // для организации работы со строками 
 #include <fstream>  // для считывания и записи данных из файла и в файл
 #include <iomanip>  // для setprecision()
-#include <cmath>    // математические выражения
+#include <cmath>    // математические выражения !!!
 
 using namespace std;//подключение пространства стандартных имен
 
